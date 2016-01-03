@@ -15,18 +15,20 @@ wireMaterial = materials.plastic
 
 # Setup
 leds = []
+offset = vector(xCount, yCount, zCount) / -2 # Offset to center cube
 for xPos in range(xCount):
     for yPos in range(yCount):
         for zPos in range(zCount):
-            pos = vector(xPos - (xCount / 2),
-                         yPos - (yCount / 2),
-                         zPos - (zCount / 2)) * gap
+            pos = (vector(xPos, yPos, zPos) + offset) * gap
             color = (xPos / xCount, yPos / yCount, zPos / zCount)
             newLed = sphere(pos=pos, radius=radius, color=color, opacity=opacity, material = material)
             leds.append(newLed)
 
-            if wires and yPos < yCount - 1:
-                cylinder(pos=pos, axis=(0, gap, 0), radius=wireRadius, color=wireColor, material = wireMaterial)
+if wires:
+    for xPos in range(xCount):
+        for zPos in range(zCount):
+            pos = (vector(xPos, 0, zPos) + offset) * gap
+            cylinder(pos=pos, axis=(0, (yCount - 1) * gap, 0), radius=wireRadius, color=wireColor, material = wireMaterial)
 
 # Algorithms
 while(True):
