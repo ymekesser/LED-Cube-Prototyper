@@ -1,6 +1,7 @@
 from __future__ import division
 from visual import *
 import math
+import time
 
 # Parameters
 gap = 12
@@ -36,6 +37,7 @@ if wires:
 r = 0
 d = 15
 s = 0.01
+
 while (True):
     for led in leds:
         assert (isinstance(led, sphere))
@@ -50,4 +52,4 @@ while (True):
     else:
         r = 0
 
-    sleep(s)
+    time.sleep(s)
