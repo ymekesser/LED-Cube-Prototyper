@@ -53,12 +53,15 @@ def setLedPixelColor(led, color, brightness):
     led.color = color
     led.opacity = brightness
 
+# transform scalar int to coordinates, at moment not needed, but possibly helpful
 def getCoords(i):
     (restW, width) = divmod(i, WIDTH)
     (restH, height) = divmod(restW, HEIGHT)
-    (blub, depth) = divmod(restH, DEPTH)
+    (_, depth) = divmod(restH, DEPTH)
     return (width, height, depth)
 
+# i is the the position of the led (0-512) r and d are legacy. todo: think about
+# what makes sense here
 def randomAlgo(i, r, d):
     (x, y, z) = getCoords(i)
     distance = randint(0,255)
