@@ -21,6 +21,7 @@ HEIGHT = 8
 DEPTH = 8
 red = (1,0,0)
 s = 0.03
+ITERATIONS = 100 #how many times do we iterate the algo?
 
 # Setup
 leds = []
@@ -66,12 +67,15 @@ def randomAlgo(i, r, d):
     else:
         return (i, (x, y, z), (0.1,0.1,0.1), 1.0)
 
-def runAlgo(frameCounter):
+def perform( fun, *arg ):
+    return fun( *arg )
+
+def runAlgo(algo, frameCounter):
     r = 0
     d = 15
     animation = []
     for i in range(frameCounter):
-        animation.append([randomAlgo(i, r, d) for i in range(WIDTH * HEIGHT * DEPTH)])
+        animation.append([perform(algo, i, r, d) for i in range(WIDTH * HEIGHT * DEPTH)])
         if r < xCount * gap:
             r = r + 5
         else:
@@ -83,11 +87,10 @@ def animateFrame(leds, frame):
         setLedPixelColor(l, c, 1.0)
     time.sleep(s)
 
-
-def applyAlgo(leds, animation):
+def applyAnimation(leds, animation):
     map(lambda frame: animateFrame(leds, frame), animation)
 
 while (True):
-    animation = runAlgo(100)
+    animation = runAlgo(randomAlgo, ITERATIONS)
     print 'animation done.'
-    applyAlgo(leds, animation)
+    applyAnimation(leds, animation)
