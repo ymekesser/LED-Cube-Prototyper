@@ -1,68 +1,33 @@
 from __future__ import division
-from visual import *
-import math
-import time
 from random import randint
+from visual import sleep, color
+from LedCube import LedCube
 
 # Parameters
-gap = 12
-xCount = yCount = zCount = 8
-radius = 2
-opacity = 1
-material = materials.emissive
-
-wires = True
-wireRadius = 0.1
-wireColor = color.gray(0.1)
-wireMaterial = materials.plastic
-
-WIDTH = 8
-HEIGHT = 8
-DEPTH = 8
-red = (1,0,0)
-green = (0,1,0)
-blue = (0,0,1)
-s = 0.03
+sleepy_time = 0.03
 ITERATIONS = 50 #how many times do we iterate the algo?
-leds = []
 
-# Setup
-def setup():
-    offset = vector(xCount, yCount, zCount) / -2  # Offset to center cube
-    for xPos in range(xCount):
-        for yPos in range(yCount):
-            for zPos in range(zCount):
-                pos = (vector(xPos, yPos, zPos) + offset) * gap
-                color = (xPos / xCount, yPos / yCount, zPos / zCount)
-                newLed = sphere(pos=pos, radius=radius, color=color, opacity=opacity, material=material)
-                leds.append(newLed)
-
-    if wires:
-        for xPos in range(xCount):
-            for zPos in range(zCount):
-                pos = (vector(xPos, 0, zPos) + offset) * gap
-                cylinder(pos=pos, axis=(0, (yCount - 1) * gap, 0), radius=wireRadius, color=wireColor,
-                         material=wireMaterial)
+led_cube = LedCube()
 
 # Algorithms
 # i is the the position of the led (0-512)
 def insideOut(i):
-    (x, y, z) = getCoords(i)
+    (x, y, z) = led_cube.get_coords(i)
     distance = randint(0,255)
     if x < distance % 9:
-        return (i, (x, y, z), red, 1.0)
+        return (i, (x, y, z), color.red, 1.0)
     elif y < distance % 9:
-        return (i, (x, y, z), blue, 1.0)
+        return (i, (x, y, z), color.blue, 1.0)
     elif z < distance % 9:
-        return (i, (x, y, z), green, 1.0)
+        return (i, (x, y, z), color.green, 1.0)
     else:
         return (i, (x, y, z), (0.1,0.1,0.1), 1.0)
 
 def randomAlgo(i):
-    (x, y, z) = getCoords(i)
+    (x, y, z) = led_cube.get_coords(i)
     distance = randint(0,255)
     if distance < 20:
-        return (i, (x, y, z), red, 1.0)
+        return (i, (x, y, z), color.red, 1.0)
     else:
         return (i, (x, y, z), (0.1,0.1,0.1), 1.0)
 
@@ -77,11 +42,7 @@ def setLedPixelColor(led, color, brightness):
     led.opacity = brightness
 
 # transform scalar int to coordinates, at moment not needed, but possibly helpful
-def getCoords(i):
-    (restW, width) = divmod(i, WIDTH)
-    (restH, height) = divmod(restW, HEIGHT)
-    (_, depth) = divmod(restH, DEPTH)
-    return (width, height, depth)
+
 
 
 # apply
@@ -96,21 +57,20 @@ def apply(fun, *arg):
 def runAlgo(algo, frameCounter):
     animation = []
     for i in range(frameCounter):
-        animation.append([apply(algo, i) for i in range(WIDTH * HEIGHT * DEPTH)])
+        animation.append([apply(algo, i) for i in range(led_cube.x_count * led_cube.y_count * led_cube.z_count)])
     return animation
 
 def animateFrame(leds, frame):
     for l, (i,pos,c,_) in zip(leds, frame):
         setLedPixelColor(l, c, 1.0)
-    time.sleep(s)
+    sleep(sleepy_time)
 
 def runAnimation(leds, animation):
     map(lambda frame: animateFrame(leds, frame), animation)
 
-setup()
 while (True):
     animation = runAlgo(insideOut, ITERATIONS)
-    runAnimation(leds, animation)
+    runAnimation(led_cube.leds, animation)
     animation = runAlgo(randomAlgo, ITERATIONS)
-    runAnimation(leds, animation)
+    runAnimation(led_cube.leds, animation)
     print 'animation done.'
