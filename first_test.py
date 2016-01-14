@@ -61,9 +61,9 @@ def runAlgo(algo, frameCounter):
     return animation
 
 def animateFrame(leds, frame):
-    for l, (i,pos,c,_) in zip(leds, frame):
-        setLedPixelColor(l, c, 1.0)
-    sleep(sleepy_time)
+    led_colors = [x[2] for x in frame]
+    led_cube.update_frame(led_colors)
+    led_cube.sleep(sleepy_time)
 
 def runAnimation(leds, animation):
     map(lambda frame: animateFrame(leds, frame), animation)
