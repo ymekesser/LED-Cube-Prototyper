@@ -1,7 +1,12 @@
 from __future__ import division
 from visual import *
 import itertools
+import platform
 
+if any(platform.win32_ver()):
+    from visual import sleep
+else:
+    from time import sleep
 
 class VisualLedCube(object):
     gap = 12
