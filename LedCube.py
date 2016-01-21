@@ -86,6 +86,6 @@ class LedCube(object):
         """ Sleep for the specified amount of time.
 
         Args:
-            sleepytime (int): the amount of seconds to sleep
+            sleepytime (float): the amount of seconds to sleep
         """
         self.visual_led_cube.sleep(sleepytime)
