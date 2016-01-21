@@ -1,7 +1,8 @@
 from __future__ import division
 from random import randint
-from visual import sleep, color
 from LedCube import LedCube
+from visual import color
+
 
 # Parameters
 sleepy_time = 0.03
