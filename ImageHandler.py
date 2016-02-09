@@ -36,18 +36,17 @@ def display_image_map(led_cube, image_map, fade=True):
     if len(image_map) != led_cube.x_count or len(image_map[0]) != led_cube.y_count:
         raise Exception('Size mismatch between cube and image dimensions')
 
-    while True:
-        led_frame = []
-        for x in range(led_cube.x_count):
-            for y in range(led_cube.y_count):
-                for z in range(led_cube.z_count):
-                    r, g, b = image_map[x][y]
-                    if fade:
-                        a = 1
-                    else:
-                        a = float(z) / led_cube.z_count
-                    led_frame.append((r, g, b, a))
-        led_cube.update_frame([(1, 1, 1)] + led_frame[1:])
+    led_frame = []
+    for x in range(led_cube.x_count):
+        for y in range(led_cube.y_count):
+            for z in range(led_cube.z_count):
+                r, g, b = image_map[x][y]
+                if fade:
+                    a = float(z) / led_cube.z_count
+                else:
+                    a = 1
+                led_frame.append((r, g, b, a))
+    led_cube.update_frame([(1, 1, 1)] + led_frame[1:])
 
 
 def display_image(led_cube, path, fade=True):
