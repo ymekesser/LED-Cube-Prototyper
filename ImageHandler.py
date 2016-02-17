@@ -25,13 +25,18 @@ def load_color_map(path):
         return image_map
 
 
-def display_image_map(led_cube, image_map, fade=True):
+DISPLAY_MODE_FULL = 0
+DISPLAY_MODE_FRONT = 1
+DISPLAY_MODE_FADE = 2
+
+
+def display_image_map(led_cube, image_map, display_mode=DISPLAY_MODE_FRONT):
     """ Displays an ImageMap on the LedCube
 
     Args:
         led_cube (LedCube): The LedCube instance the image should be displayed on
         image_map (List[List[(int, int, int)]]): A List of Image rows, containing rgb-value tuples
-        fade (bool): Optional. Determines wether the image fades out towards the back.
+        display_mode (int): Defines the mode to display the image. Use the DISPLAY_MODE_X constants in this module.
     """
     if len(image_map) != led_cube.x_count or len(image_map[0]) != led_cube.y_count:
         raise Exception('Size mismatch between cube and image dimensions')
@@ -41,12 +46,17 @@ def display_image_map(led_cube, image_map, fade=True):
         for y in range(led_cube.y_count):
             for z in range(led_cube.z_count):
                 r, g, b = image_map[x][y]
-                if fade:
+                a = 1
+
+                if display_mode == DISPLAY_MODE_FRONT:
+                    if z != led_cube.z_count - 1:
+                        led_frame.append(None)
+                        continue
+                elif display_mode == DISPLAY_MODE_FADE:
                     a = float(z) / led_cube.z_count
-                else:
-                    a = 1
+
                 led_frame.append((r, g, b, a))
-    led_cube.update_frame([(1, 1, 1)] + led_frame[1:])
+    led_cube.update_frame(led_frame)
 
 
 def display_image(led_cube, path, fade=True):

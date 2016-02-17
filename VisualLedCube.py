@@ -1,7 +1,6 @@
 from __future__ import division
 from visual import *
 import itertools
-import platform
 
 class VisualLedCube(object):
     gap = 12
@@ -10,7 +9,7 @@ class VisualLedCube(object):
     opacity = 1
     material = materials.emissive
 
-    wires = True
+    wires = False
     wireRadius = 0.1
     wireColor = color.gray(0.1)
     wireMaterial = materials.plastic
@@ -65,9 +64,11 @@ class VisualLedCube(object):
 
     def set_led_color(self, led, color):
         if color is not None:
-                led.color = color[:3]
-                if len(color) > 3:
-                    led.opacity = color[3]
+            led.color = color[:3]
+            if len(color) > 3:
+                led.opacity = color[3]
+            else:
+                led.opacity = 1
 
     def sleep(self, sleepytime):
         sleep(sleepytime)

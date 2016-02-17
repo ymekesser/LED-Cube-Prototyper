@@ -28,9 +28,9 @@ class LedCube(object):
 
     def init_visual_led_cube(self):
         self.visual_led_cube = VisualLedCube(
-                x_count=self.x_count,
-                y_count=self.y_count,
-                z_count=self.z_count)
+            x_count=self.x_count,
+            y_count=self.y_count,
+            z_count=self.z_count)
 
     def update_frame(self, leds):
         """ Update the LEDs in the cube with new color values
@@ -77,10 +77,10 @@ class LedCube(object):
             (int, int, int): The (x, y, z) vector/tuple with the position of the LED
         """
 
-        (restW, width) = divmod(i, self.x_count)
-        (restH, height) = divmod(restW, self.z_count)
-        (_, depth) = divmod(restH, self.y_count)
-        return (width, height, depth)
+        (rest_w, width) = divmod(i, self.x_count)
+        (rest_h, height) = divmod(rest_w, self.z_count)
+        (_, depth) = divmod(rest_h, self.y_count)
+        return width, height, depth
 
     def sleep(self, sleepytime):
         """ Sleep for the specified amount of time.
