@@ -28,7 +28,7 @@ class JewelsAlgorithm(Algorithm):
             horizontal_point = (point[0], point[2])
             difference = numpy.subtract(horizontal_pos, horizontal_point)
             distance = math.sqrt(sum(map(lambda x: math.pow(x, 2), difference)))
-            return distance <= self.radius and point[1] >= self.pos[1] and point[1] <= self.pos[1] + self.height
+            return distance <= self.radius and self.pos[1] <= point[1] <= self.pos[1] + self.height
 
     @staticmethod
     def rotateZShape(shape, pivot, angle):
